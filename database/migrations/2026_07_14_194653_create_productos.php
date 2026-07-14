@@ -11,18 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tareas', function (Blueprint $table) {
+        Schema::create('productos', function (Blueprint $table) {
             $table->id();
-            $table->string('titulo', 25);
-            $table->longText('descripcion');
-            $table->date('fecha_inicio');
-            $table->date('fecha_fin');
-            $table->date('fecha_aproximada');
-            $table->integer('valor_puntos');
+            $table->string('nombre', 25);
+            $table->string('descripcion', 155);
+            $table->decimal('precio_estimado', 8, 2);
             $table->string('estado');
-            $table->foreignId('categoria_id')->nullable()->constrained('categorias')->onDelete('cascade');
+            $table->foreignId('categoria_producto_id')->nullable()->constrained('categoria_productos')->onDelete('cascade');
             $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('restrict');
             $table->foreignId('updated_by')->nullable()->constrained('users')->onDelete('restrict');
+            $table->string('image_url', 255);
             $table->softDeletes();
             $table->timestamps();
         });
@@ -33,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tareas');
+        Schema::dropIfExists('productos');
     }
 };

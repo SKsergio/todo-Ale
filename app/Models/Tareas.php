@@ -36,7 +36,7 @@ class Tareas extends Model
         'fecha_fin' => 'date',
         'fecha_aproximada' => 'date',
         'valor_puntos' => 'integer',
-        'estado' => 'integer',
+        'estado' => 'string',
     ];
 
     public function categoria()
