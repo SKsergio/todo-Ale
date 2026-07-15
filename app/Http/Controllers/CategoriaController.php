@@ -13,17 +13,11 @@ class CategoriaController extends Controller
      */
     public function index()
     {
-        // $categorias = Categoria::latest()->get();
+        $categorias = Categoria::latest()->get();
 
-        // return Inertia::render()
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        return Inertia::render("catalogue/category/Index", [
+            'categorias' => $categorias
+        ]);
     }
 
     /**
@@ -31,23 +25,20 @@ class CategoriaController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        $validated = $request->validate([
+            'nombre' => 'required|string|max:50',
+            'descripcion' => 'nullable|string|max:155',
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Categoria $categoria)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Categoria $categoria)
-    {
-        //
+        try {
+            Categoria::create($validated);
+        } catch (\Exception $e) {
+            return back()->withErrors([
+                'error_general' => 'Ocurrió un error interno: ' . $e->getMessage()
+            ]);
+        }
+        
+        return back()->with('message', 'Categoría creada con éxito'); 
     }
 
     /**
@@ -55,14 +46,24 @@ class CategoriaController extends Controller
      */
     public function update(Request $request, Categoria $categoria)
     {
-        //
+        $validated = $request->validate([
+            'nombre' => 'required|string|max:50',
+            'descripcion' => 'nullable|string|max:155',
+        ]);
+
+        try {
+            $categoria->update($validated);
+        } catch (\Exception $e) {
+            return back()->withErrors([
+                'error_general' => 'Ocurrió un error interno: ' . $e->getMessage()
+            ]);
+        }
+
+        return back()->with('message', 'Categoría actualizada con éxito'); 
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Categoria $categoria)
-    {
-
-    }
+    public function destroy(Categoria $categoria) {}
 }
