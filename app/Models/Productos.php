@@ -20,7 +20,6 @@ class Productos extends Model
         'descripcion',
         'precio_estimado',
         'estado',
-        'image_url',
         'categoria_producto_id',
         'created_by',
         'updated_by',
@@ -44,6 +43,20 @@ class Productos extends Model
     public function editador()
     {
         return $this->belongsTo(User::class, 'updated_by');
+    }
+
+    /*Imagebes de productos*/ 
+    public function imagenes()
+    {
+        return $this->hasMany(ProductoImagen::class);
+    }
+
+    /**
+     * Helper opcional para obtener solo la imagen principal fácilmente
+     */
+    public function imagenPrincipal()
+    {
+        return $this->hasOne(ProductoImagen::class)->where('es_principal', true);
     }
 
     public function pedidos()

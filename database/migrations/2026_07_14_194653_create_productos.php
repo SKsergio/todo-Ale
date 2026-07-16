@@ -20,7 +20,6 @@ return new class extends Migration
             $table->foreignId('categoria_producto_id')->nullable()->constrained('categoria_productos')->onDelete('cascade');
             $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('restrict');
             $table->foreignId('updated_by')->nullable()->constrained('users')->onDelete('restrict');
-            $table->string('image_url', 255);
             $table->softDeletes();
             $table->timestamps();
         });
