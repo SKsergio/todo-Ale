@@ -3,3 +3,6 @@ export interface CatalogueInterface {
     nombre: string;
     descripcion: string | null;
 }
+
+export interface CatalogueRequestInterface extends Omit<CatalogueInterface, 'id'>  {
+}
