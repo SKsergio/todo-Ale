@@ -2,6 +2,8 @@
 
 @import 'tw-animate-css';
 
+@import './components.css';
+
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 
@@ -91,8 +93,10 @@
 
 :root {
     --background: hsl(0 0% 100%);
+    --background-inputs: hsl(0, 8%, 95%);
     --foreground: hsl(0 0% 3.9%);
     --card: hsl(0 0% 100%);
+    --table-bg: hsl(0, 7%, 94%);
     --card-foreground: hsl(0 0% 3.9%);
     --popover: hsl(0 0% 100%);
     --popover-foreground: hsl(0 0% 3.9%);
@@ -128,8 +132,10 @@
 
 .dark {
     --background: hsl(254, 53%, 57%);
+    --background-inputs: hsl(251.91deg 9.09% 25.19% / 79.5%);
     --foreground: hsl(0 0% 98%);
     --card: hsl(0 0% 3.9%);
+    --table-bg: hsla(300, 5%, 7%, 0.87);
     --card-foreground: hsl(0 0% 98%);
     --popover: hsl(0 0% 3.9%);
     --popover-foreground: hsl(0 0% 98%);

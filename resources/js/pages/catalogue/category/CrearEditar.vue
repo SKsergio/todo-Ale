@@ -1,39 +1,37 @@
 <template>
-    <div v-if="open" class="modal-overlay bg-black/50">
-        <div class="relative w-full max-w-md p-4 bg-white rounded-lg shadow dark:bg-gray-800">
-
-            <div class="flex items-center justify-between p-4 border-b rounded-t dark:border-gray-700">
-                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+    <div v-if="open" class="modal-overlay">
+        <div class="modal">
+            <div class="modal__header">
+                <h3 class="modal__title">
                     {{ isEditing ? 'Editar Categoría' : 'Nueva Categoría' }}
                 </h3>
-                <button @click="emit('close')" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white">
-                    <span class="sr-only">Cerrar modal</span>
+                <button @click="emit('close')" type="button" class="modal__close">
+                    <span class="visually-hidden">Cerrar modal</span>
                     &times;
                 </button>
             </div>
 
-            <form @submit.prevent="emit('submit')" class="p-4">
-                <div class="grid gap-4 mb-4">
+            <form @submit.prevent="emit('submit')" class="modal__body">
+                <div class="form-group">
                     <div>
-                        <label for="nombre" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre</label>
-                        <input v-model="form.nombre" type="text" id="nombre" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" placeholder="Ej. Pinturas en Lienzo" required>
-                        <span v-if="form.errors.nombre" class="text-red-500 text-xs mt-1">{{ form.errors.nombre }}</span>
+                        <label for="nombre" class="form-label">Nombre</label>
+                        <input v-model="form.nombre" type="text" id="nombre" class="form-control" placeholder="Ej. Pinturas en Lienzo" required>
+                        <span v-if="form.errors.nombre" class="form-error">{{ form.errors.nombre }}</span>
                     </div>
                     <div>
-                        <label for="descripcion" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Descripción (Opcional)</label>
-                        <textarea v-model="form.descripcion" id="descripcion" rows="3" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" placeholder="Detalles de esta categoría..."></textarea>
-                        <span v-if="form.errors.descripcion" class="text-red-500 text-xs mt-1">{{ form.errors.descripcion }}</span>
+                        <label for="descripcion" class="form-label">Descripción (Opcional)</label>
+                        <textarea v-model="form.descripcion" id="descripcion" rows="3" class="form-control" placeholder="Detalles de esta categoría..."></textarea>
+                        <span v-if="form.errors.descripcion" class="form-error">{{ form.errors.descripcion }}</span>
                     </div>
                 </div>
 
-                <div class="flex justify-end gap-2 mt-6">
+                <div class="modal__footer">
                     <Button type="button" variant="outline" @click="emit('close')">Cancelar</Button>
                     <Button type="submit" :disabled="form.processing">
                         {{ isEditing ? 'Actualizar' : 'Guardar' }}
                     </Button>
                 </div>
             </form>
-            
         </div>
     </div>
 </template>
@@ -58,17 +56,3 @@ const emit = defineEmits<{
     submit: [];
 }>();
 </script>
-
-<style scoped>
-.modal-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 50;
-    display: flex;
-    overflow-y: auto;
-    overflow-x: hidden;
-    align-items: center;
-    justify-content: center;
-    background-color: rgb(0 0 0 / 0.5);
-}
-</style>

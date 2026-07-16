@@ -11,12 +11,16 @@ class CategoriaController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $categorias = Categoria::latest()->get();
+        $perPage = min(max($request->integer('per_page', 10), 1), 100);
+
+        $categorias = Categoria::oldest()
+            ->paginate($perPage)
+            ->withQueryString();
 
         return Inertia::render("catalogue/category/Index", [
-            'categorias' => $categorias
+            'categorias' => $categorias,
         ]);
     }
 
@@ -37,8 +41,8 @@ class CategoriaController extends Controller
                 'error_general' => 'Ocurrió un error interno: ' . $e->getMessage()
             ]);
         }
-        
-        return back()->with('message', 'Categoría creada con éxito'); 
+
+        return back()->with('message', 'Categoría creada con éxito');
     }
 
     /**
@@ -59,11 +63,22 @@ class CategoriaController extends Controller
             ]);
         }
 
-        return back()->with('message', 'Categoría actualizada con éxito'); 
+        return back()->with('message', 'Categoría actualizada con éxito');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Categoria $categoria) {}
+    public function destroy(Categoria $categoria)
+    {
+        try {
+            $categoria->delete();
+        } catch (\Exception $e) {
+            return back()->withErrors([
+                'error_general' => 'Ocurrió un error interno: ' . $e->getMessage()
+            ]);
+        }
+
+        return back()->with('message', 'Categoría Eliminada con éxito');
+    }
 }

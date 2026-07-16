@@ -17,42 +17,52 @@
             </div>
 
             <!-- Tabla de Categorías -->
-            <div class="relative flex-1 rounded-xl border border-sidebar-border/70 dark:border-sidebar-border bg-white dark:bg-gray-800 overflow-hidden">
-                <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b dark:border-gray-700">
+            <div class="table-wrapper">
+                <table class="table">
+                    <thead>
                         <tr>
-                            <th scope="col" class="px-6 py-3">Nombre</th>
-                            <th scope="col" class="px-6 py-3">Descripción</th>
-                            <th scope="col" class="px-6 py-3 text-right">Acciones</th>
+                            <th scope="col">Id</th>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Descripción</th>
+                            <th scope="col" class="th--end">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Iteramos las categorías que envía el controlador -->
-                        <tr v-for="categoria in categorias" :key="categoria.id" class="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                            <td class="px-6 py-4 font-medium text-gray-900 dark:text-white">
+                        <!-- Iteramos las categorías de la página actual -->
+                        <tr v-for="categoria in categorias.data" :key="categoria.id">
+                            <td class="td--strong">
+                                {{ categoria.id }}
+                            </td>
+                            <td class="td--strong">
                                 {{ categoria.nombre }}
                             </td>
-                            <td class="px-6 py-4">
+                            <td>
                                 {{ categoria.descripcion || 'Sin descripción' }}
                             </td>
-                            <td class="px-6 py-4 text-right">
-                                <button @click="openEditModal(categoria)" class="text-blue-600 dark:text-blue-500 hover:underline mr-4">
+                            <td class="td--end">
+                                <button @click="openEditModal(categoria)" class="action-link">
                                     Editar
                                 </button>
-                                <button @click="deleteCategoria(categoria.id)" class="text-red-600 dark:text-red-500 hover:underline">
+                                <button @click="deleteCategoria(categoria.id)" class="action-link action-link--danger">
                                     Eliminar
                                 </button>
                             </td>
                         </tr>
-                        <!-- Mensaje si no hay datos -->
-                        <tr v-if="!categorias || categorias.length === 0">
-                            <td colspan="3" class="px-6 py-8 text-center text-gray-500">
+                        <tr v-if="categorias.data.length === 0">
+                            <td colspan="4" class="table-empty">
                                 No hay categorías registradas aún. ¡Agrega la primera!
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
+
+            <Pagination
+                :links="categorias.links"
+                :from="categorias.from"
+                :to="categorias.to"
+                :total="categorias.total"
+            />
         </div>
 
         <CrearEditar
@@ -67,15 +77,17 @@
 
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
+import Pagination from '@/components/Pagination.vue';
 import { dashboard } from '@/routes';
-import { type BreadcrumbItem } from '@/types';
+import { type BreadcrumbItem, type Paginated } from '@/types';
 import { Head, router, useForm } from '@inertiajs/vue3';
 import { Button } from '@/components/ui/button';
 import { ref } from 'vue';
 import CrearEditar from './CrearEditar.vue';
+import { CatalogueInterface } from '@/types/catalogue/CatalogueInterface.js';
 
 const props = defineProps<{
-    categorias: Array<any>;
+    categorias: Paginated<CatalogueInterface>;
 }>();
 
 const breadcrumbs: BreadcrumbItem[] = [
